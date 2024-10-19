@@ -1,0 +1,54 @@
+version: "3.9"
+
+services:
+  marketing:
+    container_name: marketing_container
+    build:
+      context: ./marketing
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 8081:80
+    networks:
+      - microfrontends
+
+  auth:
+    container_name: auth_container
+    build:
+      context: ./auth
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 8082:80
+    networks:
+      - microfrontends
+
+  dashboard:
+    container_name: dashboard_container
+    build:
+      context: ./dashboard
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 8083:80
+    networks:
+      - microfrontends
+
+  container:
+    container_name: container_container
+    build:
+      context: ./container
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 8080:80
+    depends_on:
+      - marketing
+      - auth
+      - dashboard
+    networks:
+      - microfrontends
+
+networks:
+  microfrontends:
+    name: microfrontends
